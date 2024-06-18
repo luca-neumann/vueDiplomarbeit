@@ -1,9 +1,14 @@
-const express = require('express');
-const mysql = require('mysql');
-const cors = require('cors');
+import express from 'express';
+import mysql from 'mysql';
+import cors from 'cors';
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: '*', // Erlaubt Anfragen von allen Quellen. Für mehr Sicherheit, spezifische URL angeben.
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -33,8 +38,7 @@ app.get('/api/data', (req, res) => {
   });
 });
 
-
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3000; // Ändern Sie den Port hier
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

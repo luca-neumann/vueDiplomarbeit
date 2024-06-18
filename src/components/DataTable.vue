@@ -12,57 +12,51 @@
       </thead>
       <tbody>
         <tr v-for="(row, index) in data" :key="index">
-          <td>{{ row.id }}</td>
-          <td>{{ row.wert }}</td>
-          <td>{{ row.time }}</td>
-          <td>{{ row.client }}</td>
+          <td>{{ row.ID }}</td>
+          <td>{{ row.Wert }}</td>
+          <td>{{ row.Time }}</td>
+          <td>{{ row.Client }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
 
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        data: [],
-        headers: []
-      };
-    },
-    created() {
-      this.fetchData();
-    },
-    methods: {
-      async fetchData() {
-        try {
-          const response = await axios.get('http://localhost:3306');
-          this.data = response.data;
-          if (this.data.length > 0) {
-            this.headers = Object.keys(this.data[0]);
-          }
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      data: [],
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/data'); // Ändern Sie die URL auf den richtigen Port
+        this.data = response.data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     }
-  };
-  </script>
-  
-  <style scoped>
-  table {
-    width: 100%;
-    border-collapse: collapse;
   }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+th {
+  background-color: #f2f2f2;
+}
+</style>
