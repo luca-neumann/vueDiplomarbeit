@@ -11,10 +11,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, index) in data" :key="index">
+        <tr v-for="(row, index) in sortedData" :key="index">
           <td>{{ row.ID }}</td>
           <td>{{ row.Wert }}</td>
-          <td>{{ row.Time }}</td>
+          <td style="white-space: nowrap;">{{ formatDateTime(row.Time) }}</td>
           <td>{{ row.Client }}</td>
         </tr>
       </tbody>
@@ -42,10 +42,45 @@ export default {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+    },
+    formatDateTime(dateTimeString) {
+      const date = new Date(dateTimeString);
+
+      // Optionen für die Locale-String Methode
+      const options = {
+        timeZone: 'Europe/Berlin',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      };
+
+      // Formatierte Datum-Zeit-String
+      const formattedDate = date.toLocaleString('de-DE', options);
+
+      // Datum und Zeit trennen
+      const [datePart, timePart] = formattedDate.split(', ');
+
+      return `${datePart} ${timePart.slice(0, 5)}`;
+    }
+  },
+  computed: {
+    sortedData() {
+      return this.data.slice().sort((a, b) => new Date(b.Time) - new Date(a.Time));
     }
   }
 };
 </script>
+
+<style>
+.date-time {
+  white-space: nowrap;
+}
+</style>
+
 
 <style scoped>
 table {
