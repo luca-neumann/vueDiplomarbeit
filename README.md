@@ -57,11 +57,11 @@ npm install
 ### Running the Project
 
 ```
-npm run dev
+npm run start
 ```
 
 Führt die App aus.\
-Öffne [http://localhost:5173](http://localhost:5173), um die Webseite zu sehen.
+Öffne [http://localhost:3000](http://localhost:3000), um die Webseite zu sehen.
 
 Die Seite wird neu geladen, wenn man Änderungen vornimmt.\
 Fehler werden auf dem Terminal angezeigt.
