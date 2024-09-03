@@ -1,0 +1,1 @@
+<!-- standard Sicht mit Infos zum Projekt sowie vielleicht Karte -->
