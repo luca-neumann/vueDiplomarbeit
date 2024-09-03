@@ -1,15 +1,11 @@
 <script setup>
-import Navbar from './components/Navbar.vue'
-import TabeleData from './components/TableData.vue'
+import Navbar from '@/components/Navbar.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <header>
-    <Navbar/>
-  </header>
-    <main>
-    <TabeleData :data="$data" />
-  </main>
+  <Navbar />
+  <RouterView />
 </template>
 
 <style scoped>

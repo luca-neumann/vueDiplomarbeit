@@ -12,6 +12,9 @@ Vue.js mit Tailwind Css
 
 - aufzählen -
 
+Wir benutzen zum authentifizieren, also Registrieren und Login, den Vue-Router.
+Video: https://www.youtube.com/watch?v=D02w84N1LoM&list=PL_euSNU_eLbeHw1Ov7HdVGELQ_ztuAjx8
+
 #### Warum Tailwind Css und was ist Tailwind Css?
 
 Tailwind CSS ist ein Utility-First CSS-Framework, das durch vordefinierte Utility-Klassen die Entwicklung\
