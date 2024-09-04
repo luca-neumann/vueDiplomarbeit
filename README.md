@@ -12,8 +12,7 @@ Vue.js mit Tailwind Css
 
 - aufzählen -
 
-Wir benutzen zum authentifizieren, also Registrieren und Login, den Vue-Router.
-Video: https://www.youtube.com/watch?v=D02w84N1LoM&list=PL_euSNU_eLbeHw1Ov7HdVGELQ_ztuAjx8
+Wir benutzen zum authentifizieren, also Registrieren und Login, VueX.
 
 #### Warum Tailwind Css und was ist Tailwind Css?
 
@@ -71,6 +70,7 @@ Fehler werden auf dem Terminal angezeigt.
 
 ## Credits
 
-- x -
+- [Traversy Media](https://www.youtube.com/watch?v=VeNfHj6MhgA)
+- [Salah Bedeiwi](https://www.youtube.com/watch?v=8wCfljIvXgM&list=PLiqIvaqernp2zqtsiazEtXofReO53u1M1&index=2)
 
 
