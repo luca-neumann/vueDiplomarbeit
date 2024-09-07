@@ -97,6 +97,27 @@ if($action == 'login'){
     mysqli_stmt_close($stmt);
 }
 
+if($action == 'update'){
+    $userid = $_POST['userid'];
+    $name = $_POST['name'];
+    $brokername = $_POST['brokername'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = mysqli_prepare($connect, "UPDATE user SET Name=?, Brokername=?, Email=?, Password=? WHERE UserID=?");
+    mysqli_stmt_bind_param($stmt, "ssssi", $name, $brokername, $email, $password, $userid);
+    $execute = mysqli_stmt_execute($stmt);
+
+    if($execute){
+        $result['message'] = "User updated successfully!";
+    }else{
+        $result['error'] = true;
+        $result['message'] = "Failed to update user!";
+    }
+
+    mysqli_stmt_close($stmt);
+}
+
 
 echo json_encode($result);
 mysqli_close($connect);

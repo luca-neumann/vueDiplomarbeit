@@ -35,7 +35,7 @@ export default {
         console.log('Registration failed');
       }
     },
-    // database
+    // Datenbank
     async addNewRegistrationToDd() {
       try {
         this.v$.$validate();

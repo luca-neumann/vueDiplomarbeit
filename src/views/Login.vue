@@ -23,29 +23,37 @@ export default {
         }
     },
     methods: {
-        async login() {
-            this.v$.$validate();
-            if (!this.v$.$error) {
-                try {
-                    const formData = new FormData();
-                    for (const key in this.loginData) {
-                        formData.append(key, this.loginData[key]);
-                    }
-                    const response = await axios.post('http://localhost/php/vuediplomarbeit/src/api/user.php?action=login', formData);
-                    if (response.data.status === 'success') {
-                        console.log('Login successful');
-                        this.$router.push('/feed');
-                    this.$router.push('/feed');
-                } else {
-                    console.log(response.data.message || 'Login failed');
-                    alert(response.data.message || 'Login failed');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while trying to log in.');
-            }
+        checkLogin() {
+        this.v$.$validate(); 
+            if(!this.v$.$error) {
+                this.$router.push('/feed');
             } else {
-                console.log('Invalid input fields');
+                console.log('Login failed');
+            }
+        },
+        // Datenbank
+        async login() {
+            try {
+            const formData = new FormData();
+            for (const key in this.loginData) {
+                formData.append(key, this.loginData[key]);
+            }
+            const response = await axios.post('http://localhost/php/vuediplomarbeit/src/api/user.php?action=login', formData);
+            if (response.data.status === 'success') {
+                console.log('Login successful');
+                // es wird in den Local Storage geschrieben
+                localStorage.setItem('userData', JSON.stringify(response.data.userData));
+            } else {
+                console.log(response.data.message || 'Login failed');
+                if (response.data.message === 'User not found') {
+                alert('User not found');
+                } else if (response.data.message === 'Invalid password') {
+                alert('Invalid password');
+                } 
+            }
+            } catch (error) {
+            console.error(error);
+            alert('An error occurred while trying to log in.');
             }
         },
     },
@@ -67,7 +75,7 @@ export default {
                     <input type="password" id="password" class="w-full px-4 py-2 border border-green-500 rounded" v-model="loginData.password" @blur="v$.loginData.password.$touch()"/>
                     <span v-if="v$.loginData.password.$error">Password is required</span>
                 </div>
-                <button type="button" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800" @click="login">Login</button>
+                <button type="button" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800" @click="login(), checkLogin()">Login</button>
             </form>
         </div>
     </div>
@@ -81,4 +89,3 @@ export default {
     border-color: red;
 }
 </style>
-

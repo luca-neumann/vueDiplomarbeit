@@ -3,6 +3,20 @@
  import logo from '@/assets/logo.svg';
  import home from '@/assets/home.svg';
  import { RouterLink } from 'vue-router';
+
+ export default {
+  data() {
+    return {
+      showMenu: false
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('token');
+      this.$router.push('/login');
+    }
+  },
+}
 </script>
 
 <template>
@@ -25,10 +39,14 @@
         </div>
         </div>
         <div class="flex items-center justify-end md:ml-auto">
-        <RouterLink to="feed"
-          class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">
-          <img class="h-6 w-auto" src="..\assets\home.svg" alt="Home" />
-        </RouterLink>
+          <button class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="showMenu = !showMenu">
+            <img class="h-6 w-auto" src="..\assets\home.svg" alt="Home" />
+          </button>
+          <div v-if="showMenu" class="absolute top-28 mt-2 bg-white border border-green-500 rounded-md shadow-lg">
+            <RouterLink to="/feed" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Your Data</RouterLink>
+            <RouterLink to="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</RouterLink>
+            <RouterLink to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200" @click="logout()">Sign Out</RouterLink>
+          </div>
         </div>
       </div>
     </div>
