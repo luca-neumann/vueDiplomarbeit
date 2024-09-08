@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
@@ -19,7 +19,7 @@ const routes = [
     {
         path: '/settings',
         name: 'Settings',
-        component: () => import('./views/settings.vue')
+        component: () => import('./views/Settings.vue') // Überprüfen Sie den Dateinamen und Pfad
     },
     {
         path: '/feed',
@@ -33,23 +33,10 @@ const routes = [
         component: () => import('./views/NotFoundView.vue')
     },
 ];
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
-})
-
-router.beforeEach(async (to, from, next) => {
-    if(to.matched.some(record => record.meta.requiresAuth)) {
-        // authetifications check
-        const token = localStorage.getItem('token');
-        if(token) {
-            next();
-        } else {
-            next('/login');
-        }
-        return;
-    }
-    next();
 });
 
 export default router;
