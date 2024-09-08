@@ -35,6 +35,7 @@ $data = json_decode($input, true);
 // actions
 $action = $_GET['action'] ?? '';
 
+// alle User werden ausgelesen
 if ($action == 'read') {
     $sql = mysqli_query($connect, "SELECT * FROM user");
     $users = array();
@@ -50,6 +51,39 @@ if ($action == 'read') {
     $result['user'] = $users;
 }
 
+// ein bestimmter User wird ausgelesen
+if ($action == 'getUser') {
+    $userId = $_GET['UserID'] ?? null;
+
+    if ($userId) {
+        $stmt = mysqli_prepare($connect, "SELECT * FROM user WHERE UserID = ?");
+        mysqli_stmt_bind_param($stmt, "i", $userId);
+        mysqli_stmt_execute($stmt);
+        $result_stmt = mysqli_stmt_get_result($stmt);
+        $user = mysqli_fetch_array($result_stmt);
+
+        if ($user) {
+            $result['user'] = array(
+                "UserID" => $user['UserID'],
+                "Name" => $user['Name'],
+                "Brokername" => $user['Brokername'],
+                "Email" => $user['Email'],
+                "Password" => $user['Password']
+            );
+        } else {
+            $result['error'] = true;
+            $result['message'] = "User not found!";
+        }
+
+        mysqli_stmt_close($stmt);
+    } else {
+        $result['error'] = true;
+        $result['message'] = "UserID is required!";
+    }
+}
+
+// ein neuer User wird hinzugefügt
+// es muss noch geprüft werden, ob die Email bereits existiert
 if ($action == 'registration') {
     $name = $data['name'] ?? null;
     $brokername = $data['brokername'] ?? null;
@@ -76,6 +110,7 @@ if ($action == 'registration') {
     }
 }
 
+// ein User loggt sich ein
 if ($action == 'login') {
     $email = $data['email'] ?? null;
     $password = $data['password'] ?? null;
@@ -90,6 +125,7 @@ if ($action == 'login') {
         if ($user) {
             // generiert token
             $token = bin2hex(random_bytes(64));
+
             $result['message'] = "Login successful!";
             $result['error'] = false;
             $result['user'] = array(
@@ -112,6 +148,7 @@ if ($action == 'login') {
     }
 }
 
+// ein User wird geupdatet
 if ($action == 'update') {
     $userid = $data['userid'] ?? null;
     $name = $data['name'] ?? null;

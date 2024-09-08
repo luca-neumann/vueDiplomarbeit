@@ -1,23 +1,42 @@
-<script> 
- // funktioniert so noch nicht
- import logo from '@/assets/logo.svg';
- import home from '@/assets/home.svg';
- import { RouterLink } from 'vue-router';
+<script>
+import { ref, onMounted } from 'vue';
+import { useRouter, RouterLink } from 'vue-router';
+import logo from '@/assets/logo.svg';
+import home from '@/assets/home.svg';
 
- export default {
-  data() {
-    return {
-      showMenu: false
-    }
-  },
-  methods: {
-    logout() {
+export default {
+  name: 'Navbar',
+  setup() {
+    const showMenu = ref(false);
+    const isLoggedIn = ref(false);
+    const router = useRouter();
+
+    const checkLoginStatus = () => {
+      isLoggedIn.value = !!localStorage.getItem('token');
+    };
+
+    const logout = () => {
       localStorage.removeItem('token');
-      this.$router.push('/login');
-    }
-  },
-}
+      localStorage.removeItem('userid');
+      isLoggedIn.value = false;
+      router.push('/login');
+    };
+
+    onMounted(() => {
+      checkLoginStatus();
+    });
+
+    return {
+      showMenu,
+      isLoggedIn,
+      logout,
+      checkLoginStatus
+    };
+  }
+};
 </script>
+
+<!-- Nachdem sich eingelogged wurde, wird Sign in beim Menu nicht zu Sign Out, erst nach dem laden der Seite wird es aktualisiert -->
 
 <template>
 <nav class="bg-green-700 border-b border-green-500 lg:mt-7 mr-7 ml-7 md:mt-7 sm:mt-0 rounded-lg">
@@ -45,7 +64,8 @@
           <div v-if="showMenu" class="absolute top-28 mt-2 bg-white border border-green-500 rounded-md shadow-lg">
             <RouterLink to="/feed" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Your Data</RouterLink>
             <RouterLink to="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</RouterLink>
-            <RouterLink to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200" @click="logout()">Sign Out</RouterLink>
+            <RouterLink v-if="isLoggedIn" to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200" @click="logout">Sign Out</RouterLink>
+            <RouterLink v-else to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Sign In</RouterLink>
           </div>
         </div>
       </div>

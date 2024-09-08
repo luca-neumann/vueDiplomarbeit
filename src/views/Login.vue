@@ -44,6 +44,8 @@ export default {
                     console.log('Login successful, User ID:', response.data.user.UserID);
                     console.log('Token:', response.data.token);
                     localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userid', response.data.user.UserID);
+
                     router.push('/feed');
                 }
             } catch (error) {
