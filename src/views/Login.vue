@@ -47,6 +47,8 @@ export default {
                     localStorage.setItem('userid', response.data.user.UserID);
 
                     router.push('/feed');
+
+                    location.reload();
                 }
             } catch (error) {
                 console.error('An error occurred:', error);
@@ -77,7 +79,7 @@ export default {
                     <input type="password" id="password" class="w-full px-4 py-2 border border-green-500 rounded" v-model="loginData.password" @blur="v$.loginData.password.$touch()"/>
                     <span v-if="v$.loginData.password.$error">Password is required</span>
                 </div>
-                <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800">Login</button>
+                <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800" onclick="">Login</button>
             </form>
         </div>
     </div>

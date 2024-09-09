@@ -22,6 +22,10 @@ export default {
       router.push('/login');
     };
 
+    const login = () => {
+      isLoggedIn.value = true;
+    };
+
     onMounted(() => {
       checkLoginStatus();
     });
@@ -35,8 +39,6 @@ export default {
   }
 };
 </script>
-
-<!-- Nachdem sich eingelogged wurde, wird Sign in beim Menu nicht zu Sign Out, erst nach dem laden der Seite wird es aktualisiert -->
 
 <template>
 <nav class="bg-green-700 border-b border-green-500 lg:mt-7 mr-7 ml-7 md:mt-7 sm:mt-0 rounded-lg">
@@ -57,15 +59,22 @@ export default {
           </div>
         </div>
         </div>
-        <div class="flex items-center justify-end md:ml-auto">
+        <div class="flex items-center justify-end md:ml-auto"  v-if="!isLoggedIn">
+          <div class="flex space-x-2">
+            <RouterLink to="/registration" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Sign Up</RouterLink>
+            <RouterLink to="/login" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="login()">Sign In</RouterLink>
+          </div>
+        </div>
+        <div class="flex items-center justify-end md:ml-auto" v-if="isLoggedIn">
           <button class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="showMenu = !showMenu">
             <img class="h-6 w-auto" src="..\assets\home.svg" alt="Home" />
           </button>
           <div v-if="showMenu" class="absolute top-28 mt-2 bg-white border border-green-500 rounded-md shadow-lg">
             <RouterLink to="/feed" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Your Data</RouterLink>
             <RouterLink to="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</RouterLink>
-            <RouterLink v-if="isLoggedIn" to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200" @click="logout">Sign Out</RouterLink>
-            <RouterLink v-else to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Sign In</RouterLink>
+            <RouterLink v-if="isLoggedIn" to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200" @click="logout()">Sign Out</RouterLink>
+            <!-- Wir eigentlich nicht mehr benötig, weil wenn der User nicht eingeloggt ist, sieht er diese div sowieso nicht -->
+            <!-- <RouterLink v-else to="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Sign In</RouterLink> -->
           </div>
         </div>
       </div>
