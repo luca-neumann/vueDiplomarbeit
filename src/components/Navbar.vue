@@ -53,16 +53,16 @@ export default {
         
         <div class="flex flex-1 items-center justify-center">
           <div class="flex space-x-2">
-            <RouterLink to="/features" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Features</RouterLink>
-            <RouterLink to="/project" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">About the Project</RouterLink>
-            <RouterLink to="/contact" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Contact</RouterLink>
+            <RouterLink to="/features" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Messung</RouterLink>
+            <RouterLink to="/project" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Über das Projekt</RouterLink>
+            <RouterLink to="/contact" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Kontakt</RouterLink>
           </div>
         </div>
         </div>
-        <div class="flex items-center justify-end md:ml-auto"  v-if="!isLoggedIn">
+        <div class="flex items-center justify-end md:ml-auto" v-if="!isLoggedIn">
           <div class="flex space-x-2">
-            <RouterLink to="/registration" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Sign Up</RouterLink>
-            <RouterLink to="/login" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="login()">Sign In</RouterLink>
+            <RouterLink to="/registration" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Registrieren</RouterLink>
+            <RouterLink to="/login" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="login()">Anmelden</RouterLink>
           </div>
         </div>
         <div class="flex items-center justify-end md:ml-auto" v-if="isLoggedIn">

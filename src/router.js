@@ -31,6 +31,21 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/features',
+        name: 'Features',
+        component: () => import('./views/navViews/features.vue')
+    },
+    {
+        path: '/project',
+        name: 'Project',
+        component: () => import('./views/navViews/project.vue')
+    },
+    {
+        path: '/contact',
+        name: 'Contact',
+        component: () => import('./views/navViews/contact.vue')
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'pagenotfound',
         component: () => import('./views/NotFoundView.vue')

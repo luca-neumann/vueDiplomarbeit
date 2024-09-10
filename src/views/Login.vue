@@ -45,6 +45,9 @@ export default {
                     console.log('Token:', response.data.token);
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userid', response.data.user.UserID);
+                    localStorage.setItem('name', response.data.user.name);
+                    localStorage.setItem('email', response.data.user.email);
+                    localStorage.setItem('brokername', response.data.user.brokername);
 
                     router.push('/feed');
 
