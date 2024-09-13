@@ -149,29 +149,65 @@ if ($action == 'login') {
 }
 
 // ein User wird geupdatet
-if ($action == 'update') {
-    $userid = $data['userid'] ?? null;
+if ($action == 'updateUser') {
+    $userid = $_GET['UserID'] ?? null;
     $name = $data['name'] ?? null;
     $brokername = $data['brokername'] ?? null;
     $email = $data['email'] ?? null;
     $password = $data['password'] ?? null;
 
-    if ($userid && $name && $brokername && $email && $password) {
-        $stmt = mysqli_prepare($connect, "UPDATE user SET Name=?, Brokername=?, Email=?, Password=? WHERE UserID=?");
-        mysqli_stmt_bind_param($stmt, "ssssi", $name, $brokername, $email, $password, $userid);
-        $execute = mysqli_stmt_execute($stmt);
+    if ($userid) {
+        // Abrufen der aktuellen Benutzerdaten
+        $stmt = mysqli_prepare($connect, "SELECT * FROM user WHERE UserID = ?");
+        mysqli_stmt_bind_param($stmt, "i", $userid);
+        mysqli_stmt_execute($stmt);
+        $result_stmt = mysqli_stmt_get_result($stmt);
+        $user = mysqli_fetch_array($result_stmt);
 
-        if ($execute) {
-            $result['message'] = "User updated successfully!";
+        if ($user) {
+            // Verwenden Sie die vorhandenen Daten, wenn die neuen Daten nicht ausgefüllt sind
+            $name = $name ?? $user['Name'];
+            $brokername = $brokername ?? $user['Brokername'];
+            $email = $email ?? $user['Email'];
+            $password = $password ?? $user['Password'];
+
+            // Aktualisieren der Benutzerdaten
+            $stmt = mysqli_prepare($connect, "UPDATE user SET Name=?, Brokername=?, Email=?, Password=? WHERE UserID=?");
+            mysqli_stmt_bind_param($stmt, "ssssi", $name, $brokername, $email, $password, $userid);
+            $execute = mysqli_stmt_execute($stmt);
+
+            if ($execute) {
+                // Abrufen der aktualisierten Benutzerdaten
+                $stmt = mysqli_prepare($connect, "SELECT * FROM user WHERE UserID = ?");
+                mysqli_stmt_bind_param($stmt, "i", $userid);
+                mysqli_stmt_execute($stmt);
+                $result_stmt = mysqli_stmt_get_result($stmt);
+                $user = mysqli_fetch_array($result_stmt);
+
+                if ($user) {
+                    $result['user'] = array(
+                        "UserID" => $user['UserID'],
+                        "Name" => $user['Name'],
+                        "Brokername" => $user['Brokername'],
+                        "Email" => $user['Email'],
+                        "Password" => $user['Password']
+                    );
+                }
+
+                $result['message'] = "User updated successfully!";
+            } else {
+                $result['error'] = true;
+                $result['message'] = "Failed to update user!";
+            }
+
+            mysqli_stmt_close($stmt);
         } else {
             $result['error'] = true;
-            $result['message'] = "Failed to update user!";
+            $result['message'] = "User not found!";
         }
-
-        mysqli_stmt_close($stmt);
     } else {
         $result['error'] = true;
-        $result['message'] = "All fields are required!";
+        $result['message'] = "UserID is required!";
     }
 }
 

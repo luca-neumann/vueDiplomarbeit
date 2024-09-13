@@ -58,6 +58,11 @@ export default {
       });
       console.log("User updated successfully");
       console.log(response.data);
+    // Aktualisierte Benutzerdaten anzeigen
+    if (response.data.user) {
+        state.user = response.data.user;
+        state.updateUser = { ...response.data.user };
+      }
     };
 
     onMounted(fetchUserData);

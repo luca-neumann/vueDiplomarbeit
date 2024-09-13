@@ -22,7 +22,7 @@ export default {
       router.push('/login');
     };
 
-    const login = () => {
+    const isLogin = () => {
       isLoggedIn.value = true;
     };
 
@@ -62,7 +62,7 @@ export default {
         <div class="flex items-center justify-end md:ml-auto" v-if="!isLoggedIn">
           <div class="flex space-x-2">
             <RouterLink to="/registration" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Registrieren</RouterLink>
-            <RouterLink to="/login" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="login()">Anmelden</RouterLink>
+            <RouterLink to="/login" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2" @click="isLogin">Anmelden</RouterLink>
           </div>
         </div>
         <div class="flex items-center justify-end md:ml-auto" v-if="isLoggedIn">
