@@ -42,7 +42,8 @@ if ($action == 'read') {
     while ($row = mysqli_fetch_array($sql)) {
         array_push($users, array(
             "UserID" => $row['UserID'],
-            "Name" => $row['Name'],
+            "Firstname" => $row['Firstname'],
+            "Lastname" => $row['Lastname'],
             "Brokername" => $row['Brokername'],
             "Email" => $row['Email'],
             "Password" => $row['Password']
@@ -65,7 +66,8 @@ if ($action == 'getUser') {
         if ($user) {
             $result['user'] = array(
                 "UserID" => $user['UserID'],
-                "Name" => $user['Name'],
+                "Firstname" => $user['Firstname'],
+                "Lastname" => $user['Lastname'],
                 "Brokername" => $user['Brokername'],
                 "Email" => $user['Email'],
                 "Password" => $user['Password']
@@ -85,14 +87,15 @@ if ($action == 'getUser') {
 // ein neuer User wird hinzugefügt
 // es muss noch geprüft werden, ob die Email bereits existiert
 if ($action == 'registration') {
-    $name = $data['name'] ?? null;
+    $firstname = $data['firstname'] ?? null;
+    $lastname = $data['lastname'] ?? null;
     $brokername = $data['brokername'] ?? null;
     $email = $data['email'] ?? null;
     $password = $data['password'] ?? null;
 
-    if ($name && $brokername && $email && $password) {
-        $stmt = mysqli_prepare($connect, "INSERT INTO user (Name, Brokername, Email, Password) VALUES (?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, "ssss", $name, $brokername, $email, $password);
+    if ($firstname && $lastname && $brokername && $email && $password) {
+        $stmt = mysqli_prepare($connect, "INSERT INTO user (Firstname, Lastname, Brokername, Email, Password) VALUES (?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, "sssss", $firstname, $lastname, $brokername, $email, $password);
         $execute = mysqli_stmt_execute($stmt);
 
         if ($execute) {
@@ -130,7 +133,8 @@ if ($action == 'login') {
             $result['error'] = false;
             $result['user'] = array(
                 "UserID" => $user['UserID'],
-                "Name" => $user['Name'],
+                "Firstname" => $user['Firstname'],
+                "Lastname" => $user['Lastname'],
                 "Brokername" => $user['Brokername'],
                 "Email" => $user['Email'],
                 "Password" => $user['Password']
@@ -151,7 +155,8 @@ if ($action == 'login') {
 // ein User wird geupdatet
 if ($action == 'updateUser') {
     $userid = $_GET['UserID'] ?? null;
-    $name = $data['name'] ?? null;
+    $firstname = $data['firstname'] ?? null;
+    $lastname = $data['lastname'] ?? null;
     $brokername = $data['brokername'] ?? null;
     $email = $data['email'] ?? null;
     $password = $data['password'] ?? null;
@@ -166,14 +171,15 @@ if ($action == 'updateUser') {
 
         if ($user) {
             // Verwenden Sie die vorhandenen Daten, wenn die neuen Daten nicht ausgefüllt sind
-            $name = $name ?? $user['Name'];
+            $firstname = $firstname ?? $user['Firstname'];
+            $lastname = $lastname ?? $user['Lastname'];
             $brokername = $brokername ?? $user['Brokername'];
             $email = $email ?? $user['Email'];
             $password = $password ?? $user['Password'];
 
             // Aktualisieren der Benutzerdaten
-            $stmt = mysqli_prepare($connect, "UPDATE user SET Name=?, Brokername=?, Email=?, Password=? WHERE UserID=?");
-            mysqli_stmt_bind_param($stmt, "ssssi", $name, $brokername, $email, $password, $userid);
+            $stmt = mysqli_prepare($connect, "UPDATE user SET Firstname=?, Lastname=?, Brokername=?, Email=?, Password=? WHERE UserID=?");
+            mysqli_stmt_bind_param($stmt, "sssssi", $firstname, $lastname, $brokername, $email, $password, $userid);
             $execute = mysqli_stmt_execute($stmt);
 
             if ($execute) {
@@ -187,7 +193,8 @@ if ($action == 'updateUser') {
                 if ($user) {
                     $result['user'] = array(
                         "UserID" => $user['UserID'],
-                        "Name" => $user['Name'],
+                        "Firstname" => $user['Firstname'],
+                        "Lastname" => $user['Lastname'],
                         "Brokername" => $user['Brokername'],
                         "Email" => $user['Email'],
                         "Password" => $user['Password']
