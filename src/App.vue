@@ -1,15 +1,21 @@
-<script setup>
-import Navbar from '@/components/Navbar.vue';
-import { RouterView } from 'vue-router';
-</script>
-
 <template>
-  <Navbar />
-  <RouterView />
+  <div class="flex flex-col min-h-screen bg-neutral-100">
+    <Navbar />
+    <main class="flex-grow">
+      <router-view />
+    </main>
+    <Footer />
+  </div>
 </template>
 
-<style scoped>
-.template {
-  background-color: #181818;
-}
-</style>
+<script>
+import Navbar from '@/components/Navbar.vue';
+import Footer from '@/components/Footer.vue';
+
+export default {
+  components: {
+    Navbar,
+    Footer
+  }
+};
+</script>
