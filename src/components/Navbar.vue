@@ -18,10 +18,6 @@ export default {
     const logout = () => {
       localStorage.removeItem('token');
       localStorage.removeItem('userid');
-      localStorage.removeItem('firstname');
-      localStorage.removeItem('lastname');
-      localStorage.removeItem('email');
-      localStorage.removeItem('brokername');
       isLoggedIn.value = false;
       router.push('/login');
     };

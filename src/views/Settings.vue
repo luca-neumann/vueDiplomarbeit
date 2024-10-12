@@ -89,22 +89,22 @@ export default {
       <form @submit.prevent="updateSettings">
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.firstname.$error }">
           <label for="firstname" class="block mb-2">First Name</label>
-          <input type="text" id="firstname" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.firstname" v-model="updateUser.firstname" @blur="v$.updateUser.firstname.$touch()" />
+          <input type="text" id="firstname" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.Firstname" v-model="updateUser.firstname" @blur="v$.updateUser.firstname.$touch()" />
           <span v-if="v$.updateUser.firstname.$error">First name is required and must be at least 3 characters long</span>
         </div>
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.lastname.$error }">
           <label for="lastname" class="block mb-2">Last Name</label>
-          <input type="text" id="lastname" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.lastname" v-model="updateUser.lastname" @blur="v$.updateUser.lastname.$touch()" />
+          <input type="text" id="lastname" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.Lastname" v-model="updateUser.lastname" @blur="v$.updateUser.lastname.$touch()" />
           <span v-if="v$.updateUser.lastname.$error">Last name is required and must be at least 3 characters long</span>
         </div>
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.brokername.$error }">
           <label for="brokername" class="block mb-2">Brokername</label>
-          <input type="text" id="brokername" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.brokername" v-model="updateUser.brokername" @blur="v$.updateUser.brokername.$touch()" />
+          <input type="text" id="brokername" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.Brokername" v-model="updateUser.brokername" @blur="v$.updateUser.brokername.$touch()" />
           <span v-if="v$.updateUser.brokername.$error">Brokername is too short</span>
         </div>
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.email.$error }">
           <label for="email" class="block mb-2">Email</label>
-          <input type="email" id="email" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.email" v-model="updateUser.email" @blur="v$.updateUser.email.$touch()" />
+          <input type="email" id="email" class="w-full px-4 py-2 border border-green-500 rounded" :placeholder="user.Email" v-model="updateUser.email" @blur="v$.updateUser.email.$touch()" />
           <span v-if="v$.updateUser.email.$error">Email is incorrect</span>
         </div>
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.password.$error }">
