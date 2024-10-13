@@ -1,10 +1,44 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { ref, onMounted } from 'vue';
+
+const windSpeed = ref(null);
+const windDirection = ref(0); // Standardrichtung: Norden
+
+async function fetchWindData() {
+  const apiKey = 'de3a51acffa1ffc6eb47ec305836e29e';
+  const lat = 47.267;  // Breitengrad von Tirol
+  const lon = 11.392;  // Längengrad von Tirol
+  
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+    );
+    const data = await response.json();
+    
+    console.log(data);
+    
+    if (data.wind) {
+      windSpeed.value = data.wind.speed;        // Windgeschwindigkeit in m/s
+      windDirection.value = data.wind.deg;      // Windrichtung in Grad
+    } else {
+      console.error('Keine Winddaten verfügbar');
+    }
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Winddaten:', error);
+  }
+}
+
+onMounted(() => {
+  fetchWindData();
+});
+
 </script>
 
 <!-- standard Sicht mit Infos zum Projekt sowie vielleicht Karte -->
 <template>
-  <h1 class="text-4xl font-bold text-center mt-10">Willkommen auf SmartSensorNetz</h1>
+  <h1 class="text-4xl font-bold text-center mt-10 bg-gradient-to-r from-green-400 via-green-700 to-green-600 text-transparent bg-clip-text">
+    Willkommen auf SmartSensorNetz
+  </h1>
   <!-- hier muss die Karte noch fertig eingebunden werden mit, Messstationen, eventuell Wind -->
   <div class="flex justify-center mt-10">
         
@@ -36,7 +70,26 @@ import { RouterLink } from 'vue-router';
           <!-- BZ Schwaz --><path id="path7152" style="fill:#22c55e;fill-opacity:1;stroke:#064e3b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none" d="m 896.9146,1136.0068 8.00422,5.3691 40.01743,-2.6845 0.88936,7.1623 -8.88988,8.9485 14.22603,1.7897 -1.77872,5.3691 5.33615,4.4781 9.78295,0 2.66807,8.0536 -3.55743,3.5794 -0.88936,15.216 -0.88936,7.1588 -16.89781,7.1588 -2.66808,10.742 16.00846,11.633 0,5.3691 6.22551,-2.6845 0,5.3726 3.55743,-1.7897 14.22603,11.633 10.6723,8.9485 1.77872,13.4266 7.11488,3.5794 10.6723,-1.7897 15.1154,6.2639 -7.1112,25.0593 9.7793,0.8949 12.451,-4.4742 3.5574,1.7896 10.6723,17.9009 -8.8936,13.4263 -1.7787,10.7381 5.3362,25.0596 4.4467,2.6846 8.8936,30.4322 -6.2255,3.5794 -7.1148,-2.6845 -8.0043,9.8433 -11.5616,-0.8948 -8.0006,7.1587 -14.2297,-2.6845 -11.56165,8.9521 -4.44679,-2.6846 -6.22551,2.6846 -14.22603,10.7381 -13.34038,8.9524 -19.56588,0 -5.33245,8.9484 -6.22551,2.6846 -7.11487,-2.6846 -5.33615,-10.742 -16.00845,0.8948 -13.33667,-11.633 0.88936,-5.3691 6.2218,-2.6845 1.77872,-8.0572 2.66807,-3.5794 -4.44679,-15.2163 1.77872,-3.5794 -5.33245,-8.0536 0,-17.9005 14.22603,-9.8433 -3.55743,-5.3691 3.55743,-4.4781 -1.77871,-8.9485 12.45102,-3.5794 -3.55744,-29.5335 -13.34038,-17.006 -6.2218,-8.0572 -3.55743,0.8948 -0.88936,-6.2639 -2.66808,0 -5.33615,-9.8433 1.77872,-4.4743 -15.1191,-1.7897 -7.11486,-3.5832 -13.33668,1.7897 0.88936,-4.4743 6.22181,-1.7897 1.77871,-8.0536 -24.00897,-10.7417 -8.00423,-11.6331 2.66808,-7.1587 -4.44679,-2.6885 -3.55744,-11.633 -8.89358,-3.5794 18.67653,-21.4799 4.44679,4.4743 19.56218,1.7897 23.12332,-4.4743 5.33615,-5.3691 0,-15.2162 4.44679,-6.264 2.66808,-7.1623 8.88988,0 0.88936,-6.264"/>
         </g>
       </g>
+
+      <!-- Windkompass hinzufügen -->
+      <g :transform="`translate(900, 500)`" id="wind-compass">
+        <!-- Kompass-Rahmen -->
+        <circle cx="0" cy="0" r="50" stroke="black" stroke-width="2" fill="none" />
+        <!-- Himmelsrichtungen (N, E, S, W) -->
+        <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">N</text>
+        <text x="35" y="5" text-anchor="middle" font-size="12" font-weight="bold">E</text>
+        <text x="0" y="45" text-anchor="middle" font-size="12" font-weight="bold">S</text>
+        <text x="-35" y="5" text-anchor="middle" font-size="12" font-weight="bold">W</text>
+        <!-- Kompasspfeil (z.B. für Norden) -->
+        <polygon :transform="`rotate(${windDirection})`" points="0,-30 5,-20 -5,-20" fill="black" />
+      </g>
     </svg>
+  </div>
+
+  <!-- Winddaten anzeigen -->
+  <div v-if="windSpeed" class="text-center mt-5">
+    <p>Windgeschwindigkeit: {{ windSpeed }} m/s</p>
+    <p>Windrichtung: {{ windDirection }}°</p>
   </div>
 </template>
 
