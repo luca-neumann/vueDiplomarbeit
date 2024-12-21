@@ -3,6 +3,9 @@ import { ref, onMounted } from 'vue';
 
 const windSpeed = ref(null);
 const windDirection = ref(0); // Standardrichtung: Norden
+const windDirectionInnsbruck = ref(0);
+const windDirectionInnsbruckLand = ref(0);
+const windDirectionKitzbuehel = ref(0);
 
 async function fetchWindData() {
   const apiKey = 'de3a51acffa1ffc6eb47ec305836e29e';
@@ -28,8 +31,80 @@ async function fetchWindData() {
   }
 }
 
+async function fetchWindDataInnsbruck() {
+  const apiKey = 'c988a630d949bdf47db8e919f28b88f8';
+  const lat = 47.263;  // Breitengrad von Innsbruck
+  const lon = 11.395;  // Längengrad von Innsbruck
+  
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+    );
+    const data = await response.json();
+    
+    console.log(data);
+    
+    if (data.wind) {
+      windDirectionInnsbruck.value = data.wind.deg;      // Windrichtung in Grad
+    } else {
+      console.error('Keine Winddaten verfügbar');
+    }
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Winddaten:', error);
+  }
+}
+
+async function fetchWindDataInnsbruckLand() {
+  const apiKey = '5adc2ecd33a333f7588a9e93cc0c6f8c';
+  const lat = 47.117;  // Breitengrad von InnsbruckLand (Neustift)
+  const lon = 11.317;  // Längengrad von InnsbruckLand (Neustift)
+  
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+    );
+    const data = await response.json();
+    
+    console.log(data);
+    
+    if (data.wind) {
+      windDirectionInnsbruckLand.value = data.wind.deg;      // Windrichtung in Grad
+    } else {
+      console.error('Keine Winddaten verfügbar');
+    }
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Winddaten:', error);
+  }
+}
+
+async function fetchWindDataKitzbuehel() {
+  const apiKey = '5adc2ecd33a333f7588a9e93cc0c6f8c';
+  const lat = 47.350;  // Breitengrad von Kitzbuehl
+  const lon = 11.700;  // Längengrad von Kitzbuehl
+  
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+    );
+    const data = await response.json();
+    
+    console.log(data);
+    
+    if (data.wind) {
+      windDirectionKitzbuehel.value = data.wind.deg;      // Windrichtung in Grad
+    } else {
+      console.error('Keine Winddaten verfügbar');
+    }
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Winddaten:', error);
+  }
+}
+
 onMounted(() => {
   fetchWindData();
+  fetchWindDataInnsbruck();
+  fetchWindDataInnsbruckLand();
+  fetchWindDataKitzbuehel();
 });
 
 </script>
@@ -68,6 +143,16 @@ onMounted(() => {
           <!-- BZ Lienz --><path id="path7144" style="fill:#22c55e;fill-opacity:1;stroke:#064e3b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none" d="m 1198.3849,1367.8096 8.0042,10.7417 7.1112,-2.6845 8.0042,0.8948 0.8894,4.4743 8.8935,1.7897 13.3404,10.7381 15.1154,14.3215 6.2255,15.216 14.2298,-1.7933 4.4468,3.583 -5.3362,2.6845 -9.7829,18.7957 4.4468,14.3175 0.8893,4.4743 5.3362,2.6845 8.8935,8.0572 2.6681,6.2639 5.3325,2.6846 4.4468,2.6845 5.3361,3.5794 -1.7787,4.4781 3.5574,4.4743 -0.8893,16.1108 16.0084,9.8433 3.5575,8.0536 2.668,1.7897 0.8894,0 19.5622,12.5318 0.8893,5.3691 -11.5579,11.6366 -11.5617,-6.2675 -15.1191,8.952 -5.3361,5.3691 -9.783,0 -0.8893,-3.5794 -5.3325,0 -16.0084,4.4742 -13.3404,5.3691 -0.8894,10.7421 4.4468,6.2639 -9.7829,0 -0.8894,23.2696 -17.7834,2.6846 -3.5575,-5.3691 -21.3446,5.3691 -6.2218,-4.4743 -12.451,-9.8433 -12.451,0.8948 -1.7787,-5.3726 -11.5617,-0.8949 -5.3361,-5.3691 -16.0048,-10.7381 -7.1149,-28.6426 -25.7877,-4.4742 0,-16.1112 8.0006,-13.4227 -3.5575,-1.7897 -1.775,-10.7417 -5.3361,-3.5794 0,-5.3691 -10.6723,-3.5794 -9.783,8.0536 -7.1148,-15.2124 -16.8941,-6.2678 8.0005,-10.7381 -12.4473,-13.4263 1.7787,-9.8433 -3.5575,-1.7897 -1.7787,-10.7421 8.8936,-8.9485 6.2218,2.6846 14.2297,-3.5794 4.4468,-16.1108 8.0043,-5.3691 7.1148,-1.7897 8.0043,-9.8472 8.8898,-0.8949 0.8894,-4.4742 11.5617,-3.5794 5.3361,-3.5794 1.7787,-12.5314 12.451,-5.3691 5.3325,5.3691 6.2255,-4.4743 10.6723,3.5794 6.2255,-7.1588 13.3404,4.4743"/>
           <path d="m 490.51112,1144.064 12.45102,8.0537 2.66807,0.8948 8.89359,1.7897 13.34037,0 3.55744,1.7897 2.66437,-10.7382 6.22551,-7.1623 27.57011,8.0572 4.44679,-2.6846 0.88936,8.0537 16.00475,3.5794 6.22551,2.6845 0.88936,7.1588 4.44679,3.5832 12.45102,-2.6845 0,-3.5833 26.67705,-4.4742 4.44679,9.8472 5.33615,0.8948 -16.89781,8.0537 0,8.9484 4.44679,1.7897 8.89359,-2.6845 8.89358,1.7897 -0.88936,7.1623 16.89411,19.6906 -5.33245,13.4227 7.11117,3.5794 -1.77872,18.7953 -22.23026,-4.4742 -3.55743,8.0536 -17.78717,7.1627 -14.22603,-17.006 0,-8.0572 -16.00845,0.8984 -3.55744,9.8434 -9.78294,2.6845 -9.77924,-2.6845 -5.33615,12.5278 -6.22551,-2.6845 -9.78294,8.9523 -2.66808,-3.5794 -9.78294,0.8949 0,8.9485 6.22551,-0.8949 1.77871,9.8433 7.11487,0 -1.77871,13.4263 -18.67653,-3.5794 -14.22974,-14.3211 -5.33244,1.7897 0,0.8948 9.78294,8.9521 -1.77872,15.2124 -3.56114,-0.8949 -3.55373,8.0575 -17.78717,-2.6845 -4.44679,-4.4781 -11.56166,6.2678 -8.89358,19.6866 -3.55744,7.1624 -7.11116,1.7897 -8.89358,-5.3691 -4.4468,5.3691 -15.11909,-0.8948 -5.33615,3.5793 -24.89833,6.264 -4.4468,-2.6846 0,-7.1587 -4.44679,-10.7418 6.22551,-7.1588 0,-8.9485 -5.33615,-6.2678 8.89358,-8.0536 -16.00845,-6.2639 0.88936,-3.5794 8.00423,-2.6845 11.56166,3.5793 11.56166,-8.952 5.33244,0 11.56166,-8.0536 5.33615,0.8948 6.22551,-6.2639 16.89781,-29.5374 8.88988,-3.5794 6.22551,1.7897 -2.66807,-5.3691 2.66807,-9.8433 13.34038,-10.7421 0,-5.3691 -2.66807,-20.585 -6.22551,-0.8949 -2.66808,-5.3691 -1.77872,-4.4742 8.89359,-25.9545 -6.22551,-8.0572 0.88936,-7.1587 16.00845,0.8948 -10.6723,14.3211" style="fill:#22c55e;fill-opacity:1;stroke:#064e3b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none" id="path7148"/> <!-- BZ Reute -->
           <!-- BZ Schwaz --><path id="path7152" style="fill:#22c55e;fill-opacity:1;stroke:#064e3b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none" d="m 896.9146,1136.0068 8.00422,5.3691 40.01743,-2.6845 0.88936,7.1623 -8.88988,8.9485 14.22603,1.7897 -1.77872,5.3691 5.33615,4.4781 9.78295,0 2.66807,8.0536 -3.55743,3.5794 -0.88936,15.216 -0.88936,7.1588 -16.89781,7.1588 -2.66808,10.742 16.00846,11.633 0,5.3691 6.22551,-2.6845 0,5.3726 3.55743,-1.7897 14.22603,11.633 10.6723,8.9485 1.77872,13.4266 7.11488,3.5794 10.6723,-1.7897 15.1154,6.2639 -7.1112,25.0593 9.7793,0.8949 12.451,-4.4742 3.5574,1.7896 10.6723,17.9009 -8.8936,13.4263 -1.7787,10.7381 5.3362,25.0596 4.4467,2.6846 8.8936,30.4322 -6.2255,3.5794 -7.1148,-2.6845 -8.0043,9.8433 -11.5616,-0.8948 -8.0006,7.1587 -14.2297,-2.6845 -11.56165,8.9521 -4.44679,-2.6846 -6.22551,2.6846 -14.22603,10.7381 -13.34038,8.9524 -19.56588,0 -5.33245,8.9484 -6.22551,2.6846 -7.11487,-2.6846 -5.33615,-10.742 -16.00845,0.8948 -13.33667,-11.633 0.88936,-5.3691 6.2218,-2.6845 1.77872,-8.0572 2.66807,-3.5794 -4.44679,-15.2163 1.77872,-3.5794 -5.33245,-8.0536 0,-17.9005 14.22603,-9.8433 -3.55743,-5.3691 3.55743,-4.4781 -1.77871,-8.9485 12.45102,-3.5794 -3.55744,-29.5335 -13.34038,-17.006 -6.2218,-8.0572 -3.55743,0.8948 -0.88936,-6.2639 -2.66808,0 -5.33615,-9.8433 1.77872,-4.4743 -15.1191,-1.7897 -7.11486,-3.5832 -13.33668,1.7897 0.88936,-4.4743 6.22181,-1.7897 1.77871,-8.0536 -24.00897,-10.7417 -8.00423,-11.6331 2.66808,-7.1587 -4.44679,-2.6885 -3.55744,-11.633 -8.89358,-3.5794 18.67653,-21.4799 4.44679,4.4743 19.56218,1.7897 23.12332,-4.4743 5.33615,-5.3691 0,-15.2162 4.44679,-6.264 2.66808,-7.1623 8.88988,0 0.88936,-6.264"/>
+          
+          <!-- Pfeil für Innsbruck Anfang -->
+          <polygon :transform="`rotate(${windDirectionInnsbruck}, 813.32231, 1277.4151)`" points="813.32231,1277.4151 818.32231,1267.4151 808.32231,1267.4151" fill="black" />
+          <!-- Pfeil für Innsbruck Ende -->
+          <!-- Pfeil für InnsbruckLand Anfang -->
+          <polygon :transform="`rotate(${windDirectionInnsbruckLand}, 865.10948, 1325.6653)`" points="831.10948,1282.6653 836.10948,1272.6653 826.10948,1272.6653" fill="black" />
+          <!-- Pfeil für InnsbruckLand Ende -->
+           <!-- Pfeil für Kitzbühel Anfang -->
+          <polygon :transform="`rotate(${windDirectionKitzbuehel}, 965.10948, 1325.6653)`" points="831.10948,1282.6653 836.10948,1272.6653 826.10948,1272.6653" fill="black" />
+          <!-- Pfeil für Kitzbühel Ende -->
         </g>
       </g>
 
