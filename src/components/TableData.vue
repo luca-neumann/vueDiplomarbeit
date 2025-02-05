@@ -9,7 +9,8 @@ export default {
 
     const fetchSensorData = async () => {
       try {
-        const response = await axios.get('http://localhost/php/vuediplomarbeit/src/api/sensordata.php?action=read');
+        const userId = localStorage.getItem('userid');
+        const response = await axios.get(`https://os-beyond.at/htl/smart_sensor_netz/feinstaubwerte/client/${userId}`);
         console.log(response.data);
         sensorData.value = response.data.sensordata; // Extrahieren der sensordata
       } catch (error) {

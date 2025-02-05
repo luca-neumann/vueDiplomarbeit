@@ -360,23 +360,23 @@ onMounted(() => {
         </g>
       </g>
 
-      <!-- Windkompass hinzufügen -->
+      <!-- Allgemeiner Kompass für ganz Tirol, wird nicht mehr benötigt -->
+      <!--
       <g :transform="`translate(900, 500)`" id="wind-compass">
-        <!-- Kompass-Rahmen -->
         <circle cx="0" cy="0" r="50" stroke="black" stroke-width="2" fill="none" />
-        <!-- Himmelsrichtungen (N, E, S, W) -->
         <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">N</text>
         <text x="35" y="5" text-anchor="middle" font-size="12" font-weight="bold">E</text>
         <text x="0" y="45" text-anchor="middle" font-size="12" font-weight="bold">S</text>
         <text x="-35" y="5" text-anchor="middle" font-size="12" font-weight="bold">W</text>
-        <!-- Kompasspfeil (z.B. für Norden) -->
         <polygon :transform="`rotate(${windDirection})`" points="0,-30 5,-20 -5,-20" fill="black" />
       </g>
+      -->
     </svg>
   </div>
 
   <!-- Winddaten anzeigen -->
   <div v-if="windSpeed" class="text-center mt-5">
+    <p>Über ganz Tirol</p>
     <p>Windgeschwindigkeit: {{ windSpeed }} m/s</p>
     <p>Windrichtung: {{ windDirection }}°</p>
   </div>
