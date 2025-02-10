@@ -25,6 +25,7 @@ export default {
     });
 
     const updateSuccess = ref(false); // Erfolgsnachricht steuern
+    const updateAllowed = ref(false); // Checkbox-Status
 
     const rules = {
       updateUser: {
@@ -32,7 +33,7 @@ export default {
         Nachname: { minLength: minLength(3) },
         Brokername: { minLength: minLength(7) },
         Email: { email },
-        Passwort: { required, minLength: minLength(6) },
+        Passwort: { minLength: minLength(6) } // Kein required mehr!
       }
     };
 
@@ -57,6 +58,10 @@ export default {
 
     // Benutzereinstellungen aktualisieren
     const updateSettings = async () => {
+      if (!updateAllowed.value) {
+        return; // Falls die Checkbox nicht angeklickt wurde, abbrechen
+      }
+
       v$.value.$validate();
       if (v$.value.$error) {
         return;
@@ -64,7 +69,21 @@ export default {
 
       try {
         const userId = localStorage.getItem('userid');
-        const response = await axios.post(`https://os-beyond.at/htl/smart_sensor_netz/user/${userId}`, state.updateUser, {
+
+        // Nur Felder senden, die ausgefüllt wurden
+        const updatedData = {
+          Vorname: state.updateUser.Vorname || state.user.Vorname,
+          Nachname: state.updateUser.Nachname || state.user.Nachname,
+          Brokername: state.updateUser.Brokername || state.user.Brokername,
+          Email: state.updateUser.Email || state.user.Email
+        };
+
+        // Nur wenn das Passwort nicht leer ist, zur API senden
+        if (state.updateUser.Passwort) {
+          updatedData.Passwort = state.updateUser.Passwort;
+        }
+
+        const response = await axios.put(`https://os-beyond.at/htl/smart_sensor_netz/user/${userId}`, updatedData, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
           }
@@ -72,14 +91,40 @@ export default {
 
         console.log("User updated successfully:", response.data);
 
-        // Daten nur aktualisieren, wenn die API erfolgreich war
         if (response.data) {
-          state.user = { ...state.updateUser }; // Speichert die neuen Werte in user
-          updateSuccess.value = true; // Erfolgsmeldung aktivieren
-          setTimeout(() => updateSuccess.value = false, 3000); // Nach 3 Sekunden ausblenden
+          state.user = { ...updatedData };
+          updateSuccess.value = true;
+          setTimeout(() => updateSuccess.value = false, 3000);
+          updateAllowed.value = false; // Checkbox zurücksetzen
         }
       } catch (error) {
         console.error("Error updating user:", error);
+      }
+    };
+
+    // Account löschen
+    const deleteAccount = async () => {
+      const userId = localStorage.getItem('userid');
+
+      if (!confirm("Bist du sicher, dass du deinen Account löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden!")) {
+        return;
+      }
+
+      try {
+        await axios.delete(`https://os-beyond.at/htl/smart_sensor_netz/user/${userId}`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token')
+          }
+        });
+
+        console.log("Account erfolgreich gelöscht");
+
+        // Alles aus dem LocalStorage entfernen und umleiten
+        localStorage.removeItem('userid');
+        localStorage.removeItem('token');
+        window.location.href = '/vueDiplomarbeit/login';
+      } catch (error) {
+        console.error("Fehler beim Löschen des Accounts:", error);
       }
     };
 
@@ -91,7 +136,9 @@ export default {
       ...toRefs(state),
       v$,
       updateSuccess,
-      updateSettings
+      updateAllowed,
+      updateSettings,
+      deleteAccount
     };
   }
 };
@@ -103,33 +150,33 @@ export default {
       <h2 class="text-2xl font-bold mb-4">Settings</h2>
 
       <!-- Erfolgsnachricht -->
-      <p v-if="updateSuccess" class="text-green-600 font-bold mb-4">Settings updated successfully!</p>
+      <p v-if="updateSuccess" class="text-green-600 font-bold mb-4">Settings erfolgreich geupdated!</p>
 
       <form @submit.prevent="updateSettings">
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.Vorname.$error }">
-          <label for="Vorname" class="block mb-2">First Name</label>
+          <label for="Vorname" class="block mb-2">Vorname</label>
           <input 
             type="text" 
             id="Vorname" 
             class="w-full px-4 py-2 border border-green-500 rounded" 
-            :placeholder="user.Vorname || 'Enter your first name'" 
+            :placeholder="user.Vorname || 'Gib deinen Vornamen ein'" 
             v-model="updateUser.Vorname" 
             @blur="v$.updateUser.Vorname.$touch()" 
           />
-          <span v-if="v$.updateUser.Vorname.$error">First name must be at least 3 characters long</span>
+          <span v-if="v$.updateUser.Vorname.$error">Vorname muss mindestens 3 Zeichen lang sein</span>
         </div>
 
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.Nachname.$error }">
-          <label for="Nachname" class="block mb-2">Last Name</label>
+          <label for="Nachname" class="block mb-2">Nachname</label>
           <input 
             type="text" 
             id="Nachname" 
             class="w-full px-4 py-2 border border-green-500 rounded" 
-            :placeholder="user.Nachname || 'Enter your last name'" 
+            :placeholder="user.Nachname || 'Gib deinen Nachnamen ein'" 
             v-model="updateUser.Nachname" 
             @blur="v$.updateUser.Nachname.$touch()" 
           />
-          <span v-if="v$.updateUser.Nachname.$error">Last name must be at least 3 characters long</span>
+          <span v-if="v$.updateUser.Nachname.$error">Nachname muss mindestens 3 Zeichen lang sein</span>
         </div>
 
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.Brokername.$error }">
@@ -138,11 +185,11 @@ export default {
             type="text" 
             id="Brokername" 
             class="w-full px-4 py-2 border border-green-500 rounded" 
-            :placeholder="user.Brokername || 'Enter your broker name'" 
+            :placeholder="user.Brokername || 'Gib deinen Brokername ein'" 
             v-model="updateUser.Brokername" 
             @blur="v$.updateUser.Brokername.$touch()" 
           />
-          <span v-if="v$.updateUser.Brokername.$error">Brokername must be at least 7 characters long</span>
+          <span v-if="v$.updateUser.Brokername.$error">Brokername muss mindestens 7 Zeichen lang sein</span>
         </div>
 
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.Email.$error }">
@@ -151,11 +198,11 @@ export default {
             type="email" 
             id="Email" 
             class="w-full px-4 py-2 border border-green-500 rounded" 
-            :placeholder="user.Email || 'Enter your email'" 
+            :placeholder="user.Email || 'Gib deine Email ein'" 
             v-model="updateUser.Email" 
             @blur="v$.updateUser.Email.$touch()" 
           />
-          <span v-if="v$.updateUser.Email.$error">Enter a valid email</span>
+          <span v-if="v$.updateUser.Email.$error">Gültige Email-Adresse eingeben</span>
         </div>
 
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.Passwort.$error }">
@@ -167,10 +214,24 @@ export default {
             v-model="updateUser.Passwort" 
             @blur="v$.updateUser.Passwort.$touch()" 
           />
-          <span v-if="v$.updateUser.Passwort.$error">Passwort must be at least 6 characters long</span>
+          <span v-if="v$.updateUser.Passwort.$error">Passwort muss mindestens 6 Zeichen lang sein</span>
         </div>
 
-        <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800">Save</button>
+        <!-- Checkbox -->
+        <div class="mb-4">
+          <input type="checkbox" id="confirmUpdate" v-model="updateAllowed" class="mr-2" />
+          <label for="confirmUpdate">Ich bestätige, dass ich meine Daten aktualisieren möchte</label>
+        </div>
+
+        <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800 disabled:bg-gray-400" :disabled="!updateAllowed">
+          Save
+        </button>
+
+        <!-- Account löschen -->
+    <button type="button" class="w-full bg-red-600 text-white py-2 px-4 rounded mt-4 hover:bg-red-700"
+          @click="deleteAccount">
+          Account löschen
+        </button>
       </form>
     </div>
   </div>

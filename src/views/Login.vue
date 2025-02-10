@@ -46,7 +46,7 @@ export default {
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userid', response.data.userId);
 
-                    router.push('/feed');
+                    router.push('/vueDiplomarbeit/feed');
 
                     location.reload();
                 }
