@@ -44,7 +44,7 @@ const countClients = () => {
 // Funktion zur Anzeige der Tooltip-Nachricht
 const showTooltip = (ort) => {
   console.log(`Clients in ${ort}: ${clientCounts.value[ort] || 0}`);  // Korrekt auf clientCounts.value zugreifen
-  tooltipText.value = `Clients in ${ort}: ${clientCounts.value[ort] || 0}`;  // Korrekt auf clientCounts.value zugreifen
+  tooltipText.value = `Clients in ${ort}: ${clientCounts.value[ort] || 0} 📡`;  // Korrekt auf clientCounts.value zugreifen
 };
 
 
@@ -422,18 +422,22 @@ onMounted(() => {
     </div>
 
     <!-- Tooltip anzeigen -->
-    <p v-if="showTooltip">{{ tooltipText }}</p>
+    <p v-if="showTooltip" class="tooltip">{{ tooltipText }}</p>
   </div>
 
   <!-- Winddaten anzeigen -->
   <div v-if="windSpeed" class="text-center mt-5">
-    <p>Über ganz Tirol</p>
-    <p>Windgeschwindigkeit: {{ windSpeed }} m/s</p>
-    <p>Windrichtung: {{ windDirection }}°</p>
+    <p>Über ganz Tirol 💨</p>
+    <p>Windgeschwindigkeit: {{ windSpeed }} m/s 🍃</p>
+    <p>Windrichtung: {{ windDirection }}° 🧭</p>
   </div>
 </template>
 
 <style>
+.tooltip {
+  height: 30px; /* Feste Höhe damit sich nicht immer alles verschiebt wenn tooltip false */
+}
+
 svg g g path {
   cursor: pointer;
   fill: #cccccc;

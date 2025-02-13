@@ -28,7 +28,7 @@ export default {
 <!-- Ansicht wenn der Benutzer sich angemeldet hat -->
 <template>
   <h1 class="text-4xl font-bold text-center mt-10">Feed</h1>
-  <h3 class="text-3xl font-bold text-center mt-3" v-if="user">Willkommen, {{ user.Vorname }}</h3>
-  <h3 class="text-3xl font-bold text-center mt-3" v-if="!user">Willkommen</h3>
+  <h3 class="text-3xl font-bold text-center mt-3" v-if="user">Willkommen, {{ user.Vorname }} 👋</h3>
+  <h3 class="text-3xl font-bold text-center mt-3" v-if="!user">Willkommen 👋</h3>
   <TableData/>
 </template>

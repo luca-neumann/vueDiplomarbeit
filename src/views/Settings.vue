@@ -224,13 +224,13 @@ export default {
         </div>
 
         <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800 disabled:bg-gray-400" :disabled="!updateAllowed">
-          Save
+          Speichern 💾
         </button>
 
         <!-- Account löschen -->
     <button type="button" class="w-full bg-red-600 text-white py-2 px-4 rounded mt-4 hover:bg-red-700"
           @click="deleteAccount">
-          Account löschen
+          Account löschen 🗑️
         </button>
       </form>
     </div>

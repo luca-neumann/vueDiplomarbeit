@@ -67,7 +67,7 @@ export default {
 <template>
     <div class="flex justify-center items-center mt-10">
         <div class="w-1/3">
-            <h2 class="text-2xl font-bold mb-4">Login</h2>
+            <h2 class="text-2xl font-bold mb-4">Anmelden</h2>
             <form @submit.prevent="login">
                 <div class="mb-4" :class="{ 'form-group-error': v$.loginData.Email.$error }">
                     <label for="Email" class="block mb-2">Email</label>
@@ -79,7 +79,7 @@ export default {
                     <input type="password" id="Passwort" class="w-full px-4 py-2 border border-green-500 rounded" v-model="loginData.Passwort" @blur="v$.loginData.Passwort.$touch()"/>
                     <span v-if="v$.loginData.Passwort.$error">Passwort wird benötigt oder ist falsch</span>
                 </div>
-                <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800" onclick="">Login</button>
+                <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800" onclick="">LogIn 🔓</button>
             </form>
         </div>
     </div>

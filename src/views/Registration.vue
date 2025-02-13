@@ -100,7 +100,7 @@ export default {
           <input type="Password" id="Passwort" class="w-full px-4 py-2 border border-green-500 rounded" v-model="newRegistration.Passwort" @blur="v$.newRegistration.Passwort.$touch()" />
           <span v-if="v$.newRegistration.Passwort.$error">Password is required and must be at least 6 characters long</span>
         </div>
-        <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800">Register</button>
+        <button type="submit" class="w-full bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800">Registrieren 📝</button>
       </form>
     </div>
   </div>

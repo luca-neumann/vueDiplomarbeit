@@ -26,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <footer class="bg-green-700 border-t border-green-500 lg:mb-7 mr-7 ml-7 md:mb-7 sm:mb-0 rounded-lg">
+  <footer class="bg-green-700 border-t border-green-500 mt-7 lg:mb-7 mr-7 ml-7 md:mb-7 sm:mb-0 rounded-lg">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-4">
       <div class="flex flex-col md:flex-row items-center justify-between">
         <div class="flex items-center justify-start mb-4 md:mb-0">
