@@ -17,7 +17,7 @@
                 <div class="border-4 bg-green-100 border-green-500 rounded-lg p-4 mb-8 ">
                     <h3 class="text-2xl font-semibold text-black mb-4">Sensorkomponente</h3>
                     <ul class="list-disc text-lg text-black ml-8 space-y-2">
-                        <li>Hardware: Mikrocontroller (ESP32 mit LoRa), Feinstaubsensor (Plantower PMS3003 Sensor), DHT22, Batterie mit Spannungsregler</li>
+                        <li>Hardware: Mikrocontroller (ESP32 mit LoRaWAN), Feinstaubsensor (Plantower PMS3003 Sensor), Batteriefach</li>
                         <li>Programmiersprache: C/C++</li>
                         <li>Sendet Daten über MQTT und LoRaWAN an den Hub</li>
                     </ul>
@@ -26,10 +26,9 @@
                 <div class="border-4 bg-green-100 border-green-500 rounded-lg p-4 mb-8">
                     <h3 class="text-2xl font-semibold text-black mb-4">Hub / Broker Komponente</h3>
                     <ul class="list-disc text-lg text-black ml-8 space-y-2">
-                        <li>Hardware: Mikrocontroller (ESP32 mit LoRa), Stromversorgung, Luftsensor (?), LAN-Adapter?</li>
+                        <li>Hardware: Mikrocontroller (ESP32 mit LoRaWAN), Stromversorgung, WLAN-Adapter</li>
                         <li>Programmiersprache: C/C++</li>
-                        <li>Verbindet sich über die App mit WLAN (Bluetooth-Verbindung mit dem Handy)</li>
-                        <li>Empfängt Daten vom Sensor und sendet sie an die Datenbank (HTTPS-Protokoll)</li>
+                        <li>Empfängt Daten vom Sensor und sendet sie an die Datenbank</li>
                     </ul>
                 </div>
 
@@ -37,9 +36,9 @@
                     <h3 class="text-2xl font-semibold text-black mb-4">Datenbank mit GUI</h3>
                     <ul class="list-disc text-lg text-black ml-8 space-y-2">
                         <li>Hardware: Server mit MySQL</li>
-                        <li>Programmiersprache: React (JS) für die GUI und MySQL-Workbench für die Datenbank</li>
-                        <li>Datenbank speichert Daten vom Hub</li>
-                        <li>GUI stellt die Daten visuell ansprechend dar (über App und Web)</li>
+                        <li>Programmiersprache: VueJS für die GUI und MySQL für die Datenbank</li>
+                        <li>Datenbank speichert Daten vom Hub/Broker</li>
+                        <li>GUI stellt die Daten visuell ansprechend dar (über Web)</li>
                     </ul>
                 </div>
             </div>
@@ -50,10 +49,8 @@
                 <h3 class="text-2xl font-semibold text-black mb-4">Ziele der Diplomarbeit</h3>
                 <ul class="list-disc text-lg text-black ml-8 space-y-2">
                     <li>Sensorkomponente sendet Daten über LoRaWAN und MQTT an den Broker</li>
-                    <li>Broker misst auch Innenraumdaten mit einem Sensor und zeigt sowohl Innen- als auch Außendaten auf seinem eigenen OLED-Display zur Vergleich an</li>
-                    <li>Broker sendet Außendaten an die Datenbank (Oracle-Server)</li>
-                    <li>Daten werden visualisiert (Karten, etc.) und sind über eine Website und eine App zugänglich</li>
-                    <li>Die Einrichtung des Brokers erfolgt über seinen eigenen ESP32-Hotspot, sodass Benutzer ihn über eine Smartphone-Web-App konfigurieren können</li>
+                    <li>Broker sendet Außendaten an die Datenbank (Schul-Server)</li>
+                    <li>Daten werden visualisiert (Karten, etc.) und sind über eine Website zugänglich</li>
                 </ul>
             </div>
 

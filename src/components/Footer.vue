@@ -33,10 +33,10 @@ export default {
           <RouterLink class="flex flex-shrink-0 items-center mr-4" to="/">
             <img class="h-10 w-auto" src="..\assets\logo.svg" alt="Logo" />
           </RouterLink>
-          <span class="text-white text-sm">&copy; 2024 Smart Sensor Netz. All rights reserved.</span>
+          <span class="text-white text-sm">&copy; 2025 Smart Sensor Netz. All rights reserved.</span>
         </div>
         <div class="flex items-center justify-center space-x-4">
-          <RouterLink to="/privacy" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Datenschutz</RouterLink>
+          <RouterLink to="/privacy-policy" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Datenschutzerklärung</RouterLink>
           <RouterLink to="/imprint" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Impressum</RouterLink>
           <RouterLink to="/contact" class="text-white hover:bg-green-900 hover:text-white rounded-md px-3 py-2">Kontakt</RouterLink>
         </div>

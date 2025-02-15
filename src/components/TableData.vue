@@ -146,7 +146,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex justify-center mt-10">
+  <div class="flex justify-center mt-3">
     <div class="w-4/5 bg-green-700 rounded-lg">
       <table class="w-full border-collapse">
         <thead>
@@ -171,7 +171,7 @@ export default {
         <tbody>
           <tr v-if="paginatedData.length === 0">
             <td colspan="5" class="border border-green-600 p-2 text-center text-white rounded-lg">
-              Keine Daten verfügbar.
+              Keine Daten verfügbar 😟
             </td>
           </tr>
           <tr v-else v-for="data in paginatedData" :key="data.WertID">
@@ -184,15 +184,15 @@ export default {
         </tbody>
       </table>
       <div class="flex justify-between mt-4">
-        <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="bg-green-600 text-white p-2 rounded-lg ml-2 mb-2">Zurück</button>
+        <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="bg-green-600 text-white pt-2 pb-2 pr-4 pl-4 rounded-lg ml-2 mb-2">⬅️</button>
         <span class="text-white">
           Seite {{ currentPage }} von {{ totalPages }}
         </span>
-        <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="bg-green-600 text-white p-2 rounded-lg mr-2 mb-2">Weiter</button>
+        <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="bg-green-600 text-white pt-2 pb-2 pr-4 pl-4 rounded-lg mr-2 mb-2">➡️</button>
       </div>
     </div>
   </div>
-  <!-- Hier wird die Veränderung der PM-Werte angezeigt -->
+  <!-- Veränderung der PM-Werte -->
    <div class="flex justify-center">
     <div class="mt-6 text-white bg-green-600 p-4 rounded-lg w-4/5">
         <h3 class="font-bold">{{ calculatePMChange.message }}</h3>

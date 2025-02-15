@@ -300,7 +300,7 @@ onMounted(() => {
   <h1 class="text-4xl font-bold text-center mt-10 bg-gradient-to-r from-green-400 via-green-700 to-green-600 text-transparent bg-clip-text">
     Willkommen auf SmartSensorNetz
   </h1>
-  <!-- hier muss die Karte noch fertig eingebunden werden mit, Messstationen, eventuell Wind -->
+  <!-- Karte -->
   <div class="flex justify-center mt-10">
         
     <!-- Created with Inkscape (http://www.inkscape.org/) -->
@@ -427,7 +427,7 @@ onMounted(() => {
 
   <!-- Winddaten anzeigen -->
   <div v-if="windSpeed" class="text-center mt-5">
-    <p>Über ganz Tirol 💨</p>
+    <p class="font-bold">Über ganz Tirol 💨</p>
     <p>Windgeschwindigkeit: {{ windSpeed }} m/s 🍃</p>
     <p>Windrichtung: {{ windDirection }}° 🧭</p>
   </div>

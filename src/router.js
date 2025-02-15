@@ -46,10 +46,20 @@ const routes = [
         component: () => import('./views/navViews/contact.vue')
     },
     {
+        path: '/privacy-policy',
+        name: 'Privacy Policy',
+        component: () => import('./views/footerViews/privacy-policy.vue')
+    },
+    {
+        path: '/imprint',
+        name: 'Imprint',
+        component: () => import('./views/footerViews/imprint.vue')
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'pagenotfound',
         component: () => import('./views/NotFoundView.vue')
-    },
+    }
 ];
 
 
