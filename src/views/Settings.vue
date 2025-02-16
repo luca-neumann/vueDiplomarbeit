@@ -122,7 +122,7 @@ export default {
         // Alles aus dem LocalStorage entfernen und umleiten
         localStorage.removeItem('userid');
         localStorage.removeItem('token');
-        window.location.href = '/'; // damit sich Navbar aktualisiert
+        window.location.href = '/vueDiplomarbeit/'; // href und nicht router push, damit sich Navbar aktualisiert
       } catch (error) {
         console.error("Fehler beim Löschen des Accounts:", error);
       }
