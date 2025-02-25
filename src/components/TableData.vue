@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted, computed } from 'vue';
+import Plotly from 'plotly.js-dist';
 
 export default {
   name: 'TableData',
@@ -123,8 +124,53 @@ export default {
       };
     });
 
-    onMounted(() => {
-      fetchSensorData();
+    // Plotly
+    const renderPlot = () => {
+      if (sensorData.value.length === 0) return;
+
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const recentData = sensorData.value.filter(entry => new Date(entry.Zeitstempel) >= thirtyDaysAgo);
+      if (recentData.length === 0) return;
+
+      const dates = recentData.map(entry => new Date(entry.Zeitstempel));
+      const pm1Values = recentData.map(entry => entry.PM1);
+      const pm25Values = recentData.map(entry => entry.PM25);
+      const pm10Values = recentData.map(entry => entry.PM10);
+
+      const data = [
+        { x: dates, y: pm1Values, type: 'scatter', mode: 'lines', name: 'PM1', line: { color: 'red' } },
+        { x: dates, y: pm25Values, type: 'scatter', mode: 'lines', name: 'PM2.5', line: { color: 'blue' } },
+        { x: dates, y: pm10Values, type: 'scatter', mode: 'lines', name: 'PM10', line: { color: 'green' } }
+      ];
+
+      const layout = {
+        title: {
+          text: 'Feinstaubwerte der letzten 30 Tage',
+          font: {
+            size: 20,
+            color: 'black'
+          },
+          x: 0.5,
+          xanchor: 'center',
+          y: 0.95,
+          yanchor: 'top'
+        },
+        xaxis: { title: 'Datum', type: 'date' },
+        yaxis: { title: 'PM-Wert (µg/m³)' },
+        plot_bgcolor: "#f5f5f5",
+        paper_bgcolor: "#f5f5f5",
+        font: { color: "Black" }
+      };
+
+      Plotly.newPlot('plotly-chart', data, layout);
+    };
+
+
+    onMounted(async () => {
+      await fetchSensorData();
+      renderPlot();
     });
 
     return {
@@ -190,6 +236,12 @@ export default {
         </span>
         <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="bg-green-600 text-white pt-2 pb-2 pr-4 pl-4 rounded-lg mr-2 mb-2">➡️</button>
       </div>
+    </div>
+  </div>
+  <!-- hier Plotly -->
+  <div v-if="sensorData.length > 0" class="flex justify-center">
+    <div class="mt-6 text-white bg-green-600 p-4 rounded-lg w-4/5">
+      <div id="plotly-chart"></div>
     </div>
   </div>
   <!-- Veränderung der PM-Werte -->
