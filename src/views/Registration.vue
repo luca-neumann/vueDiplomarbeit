@@ -47,39 +47,61 @@ export default {
 
     const addNewRegistrationToDd = async () => {
       if (v$.value.$invalid) {
-        console.log('Validation failed');
-        return;
+          console.log('Validation failed');
+          return;
       }
 
       try {
-        const response = await axios.post(
-          'https://os-beyond.at/htl/smart_sensor_netz/register',
-          JSON.stringify(state.newRegistration),
-          {
-            headers: { 'Content-Type': 'application/json' }
+          const response = await axios.post(
+              'https://os-beyond.at/htl/smart_sensor_netz/register',
+              JSON.stringify(state.newRegistration),
+              {
+                  headers: { 'Content-Type': 'application/json' }
+              }
+          );
+
+          console.log("Server Response:", response.data);
+
+          // Prüfen, ob die API eine Meldung zurückgibt
+          if (response.data.error) {
+              if (response.data.message === "E-Mail bereits registriert") {
+                  setErrorMessage("❌ Diese E-Mail ist bereits registriert!");
+              } else {
+                  setErrorMessage(`⚠️ Fehler: ${response.data.message}`);
+              }
+              return;
           }
-        );
 
-        if (response.data.message === "E-Mail bereits registriert") {
-          setErrorMessage("❌ Diese E-Mail ist bereits registriert!");
-          return;
-        }
+          console.log('User added successfully');
 
-        console.log('User added successfully');
+          state.newRegistration.Vorname = '';
+          state.newRegistration.Nachname = '';
+          state.newRegistration.Email = '';
+          state.newRegistration.Passwort = '';
+          state.newRegistration.Brokername = '';
 
-        // Felder zurücksetzen
-        state.newRegistration.Vorname = '';
-        state.newRegistration.Nachname = '';
-        state.newRegistration.Email = '';
-        state.newRegistration.Passwort = '';
-        state.newRegistration.Brokername = '';
-
-        router.push('/login');
+          router.push('/login');
       } catch (error) {
-        console.error('An error occurred:', error);
-        setErrorMessage("⚠️ Fehler bei der Registrierung. Bitte versuche es später erneut.");
+          console.error('Ein Fehler ist aufgetreten:', error);
+
+          if (error.response) {
+              console.log("Error Response:", error.response.data);
+
+              if (error.response.status === 400 || error.response.status === 409) {
+                  if (error.response.data.message === "E-Mail bereits registriert") {
+                      setErrorMessage("❌ Diese E-Mail ist bereits registriert!");
+                  } else {
+                      setErrorMessage(`⚠️ Fehler: ${error.response.data.message}`);
+                  }
+              } else {
+                  setErrorMessage(`⚠️ Fehler: ${error.response.status} - Bitte versuche es später erneut.`);
+              }
+          } else {
+              setErrorMessage("⚠️ Fehler bei der Registrierung. Bitte überprüfe deine Internetverbindung.");
+          }
       }
-    };
+  };
+
 
     return {
       ...toRefs(state),

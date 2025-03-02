@@ -42,7 +42,7 @@ export default {
         };
 
         const login = async () => {
-            errorMessage.value = "";  // Fehler zurücksetzen
+            errorMessage.value = ""; 
 
             if (v$.value.$invalid) {
                 console.log('Validation failed');
@@ -60,7 +60,7 @@ export default {
 
                 if (response.data.error) {
                     console.error(response.data.message);
-                    setErrorMessage("❌ Falsche E-Mail oder falsches Passwort!");  // Fehler setzen
+                    setErrorMessage("❌ Ungültige E-Mail oder falsches Passwort!");
                 } else {
                     console.log('Login erfolgreich, User ID:', response.data.userId);
                     console.log('Token:', response.data.token);
@@ -68,13 +68,22 @@ export default {
                     localStorage.setItem('userid', response.data.userId);
 
                     router.push('/feed');
-
                     location.reload();
                 }
             } catch (error) {
                 console.error('Ein Fehler ist aufgetreten:', error);
-                setErrorMessage("⚠️ Fehler beim Login. Bitte versuche es später erneut.");  // Allgemeiner Fehler
+
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        setErrorMessage("❌ Ungültige E-Mail oder falsches Passwort!");
+                    } else {
+                        setErrorMessage(`⚠️ Fehler: ${error.response.status} - Bitte versuche es später erneut.`);
+                    }
+                } else {
+                    setErrorMessage("⚠️ Fehler beim Login. Bitte überprüfe deine Internetverbindung.");
+                }
             }
+
         };
 
         return {

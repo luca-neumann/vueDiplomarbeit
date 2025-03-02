@@ -24,7 +24,7 @@ export default {
       }
     });
 
-    const updateSuccess = ref(false); // Erfolgsnachricht steuern
+    const updateSuccess = ref(false); // Erfolgsnachricht
     const updateAllowed = ref(false); // Checkbox-Status
 
     const rules = {
@@ -33,13 +33,20 @@ export default {
         Nachname: { minLength: minLength(3) },
         Brokername: { minLength: minLength(7) },
         Email: { email },
-        Passwort: { minLength: minLength(6) } // Kein required mehr!
+        Passwort: { minLength: minLength(6) }
       }
     };
 
+    const errorMessage = ref("");
+    const setErrorMessage = (message) => {
+        errorMessage.value = message;
+        setTimeout(() => (errorMessage.value = ""), 5000);
+    };
+
+
     const v$ = useVuelidate(rules, state);
 
-    // Benutzerdaten abrufen und in "user" speichern
+    // Benutzerdaten abrufen und in user speichern
     const fetchUserData = async () => {
       try {
         const userId = localStorage.getItem('userid');
@@ -59,48 +66,68 @@ export default {
     // Benutzereinstellungen aktualisieren
     const updateSettings = async () => {
       if (!updateAllowed.value) {
-        return; // Falls die Checkbox nicht angeklickt wurde, abbrechen
+          return; // Falls die Checkbox nicht angeklickt wurde, abbrechen
       }
 
       v$.value.$validate();
       if (v$.value.$error) {
-        return;
+          return;
       }
 
       try {
-        const userId = localStorage.getItem('userid');
+          const userId = localStorage.getItem('userid');
 
-        // Nur Felder senden, die ausgefüllt wurden
-        const updatedData = {
-          Vorname: state.updateUser.Vorname || state.user.Vorname,
-          Nachname: state.updateUser.Nachname || state.user.Nachname,
-          Brokername: state.updateUser.Brokername || state.user.Brokername,
-          Email: state.updateUser.Email || state.user.Email
-        };
+          // Nur Felder senden, die ausgefüllt wurden
+          const updatedData = {
+              Vorname: state.updateUser.Vorname || state.user.Vorname,
+              Nachname: state.updateUser.Nachname || state.user.Nachname,
+              Brokername: state.updateUser.Brokername || state.user.Brokername,
+              Email: state.updateUser.Email || state.user.Email
+          };
 
-        // Nur wenn das Passwort nicht leer ist, zur API senden
-        if (state.updateUser.Passwort) {
-          updatedData.Passwort = state.updateUser.Passwort;
-        }
-
-        const response = await axios.put(`https://os-beyond.at/htl/smart_sensor_netz/user/${userId}`, updatedData, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token')
+          // Nur wenn das Passwort nicht leer ist, zur API senden
+          if (state.updateUser.Passwort) {
+              updatedData.Passwort = state.updateUser.Passwort;
           }
-        });
 
-        console.log("User updated successfully:", response.data);
+          const response = await axios.put(
+              `https://os-beyond.at/htl/smart_sensor_netz/user/${userId}`,
+              updatedData,
+              {
+                  headers: {
+                      Authorization: 'Bearer ' + localStorage.getItem('token')
+                  }
+              }
+          );
 
-        if (response.data) {
-          state.user = { ...updatedData };
-          updateSuccess.value = true;
-          setTimeout(() => updateSuccess.value = false, 3000);
-          updateAllowed.value = false; // Checkbox zurücksetzen
-        }
+          console.log("User updated successfully:", response.data);
+
+          if (response.data) {
+              state.user = { ...updatedData };
+              updateSuccess.value = true;
+              setTimeout(() => (updateSuccess.value = false), 3000);
+              updateAllowed.value = false; // Checkbox zurücksetzen
+          }
       } catch (error) {
-        console.error("Error updating user:", error);
+          console.error("Error updating user:", error);
+
+          if (error.response) {
+              console.log("Error Response:", error.response.data);
+
+              if (error.response.status === 400 || error.response.status === 409) {
+                  if (error.response.data.message === "E-Mail bereits registriert") {
+                      setErrorMessage("❌ Diese E-Mail ist bereits vergeben!");
+                  } else {
+                      setErrorMessage(`⚠️ Fehler: ${error.response.data.message}`);
+                  }
+              } else {
+                  setErrorMessage(`⚠️ Fehler: ${error.response.status} - Bitte versuche es später erneut.`);
+              }
+          } else {
+              setErrorMessage("⚠️ Fehler beim Aktualisieren der Einstellungen. Bitte überprüfe deine Internetverbindung.");
+          }
       }
-    };
+  };
 
     // Account löschen
     const deleteAccount = async () => {
@@ -119,7 +146,6 @@ export default {
 
         console.log("Account erfolgreich gelöscht");
 
-        // Alles aus dem LocalStorage entfernen und umleiten
         localStorage.removeItem('userid');
         localStorage.removeItem('token');
         window.location.href = '/vueDiplomarbeit/'; // href und nicht router push, damit sich Navbar aktualisiert
@@ -138,6 +164,7 @@ export default {
       updateSuccess,
       updateAllowed,
       updateSettings,
+      errorMessage,
       deleteAccount
     };
   }
@@ -150,7 +177,14 @@ export default {
       <h2 class="text-2xl font-bold mb-4">Settings</h2>
 
       <!-- Erfolgsnachricht -->
-      <p v-if="updateSuccess" class="text-green-600 font-bold mb-4">Settings erfolgreich geupdated!</p>
+      <transition name="fade">
+        <p v-if="updateSuccess" class="text-green-600 font-bold mb-4">Settings erfolgreich geupdated!</p>
+      </transition>
+      <!-- Fehlermeldung -->
+      <transition name="fade">
+        <p v-if="errorMessage" class="text-red-600 font-bold mb-4">{{ errorMessage }}</p>
+      </transition>
+
 
       <form @submit.prevent="updateSettings">
         <div class="mb-4" :class="{ 'form-group-error': v$.updateUser.Vorname.$error }">
@@ -243,5 +277,12 @@ export default {
 }
 .form-group-error input {
   border-color: red;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
